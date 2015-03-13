@@ -117,7 +117,8 @@ public abstract class Chain {
     StringBuilder sb = new StringBuilder(32);
 
     Iterator<Chain> it = reverse().iterator();
-    sb.append(it.next().getValue());
+    // sb.append(it.next().getValue());    
+    it.next(); sb.append("rootObject");
     while (it.hasNext()) {
       sb.append("->");
       Chain current = it.next();
@@ -128,6 +129,24 @@ public abstract class Chain {
       }
     }
     return sb.toString();
+  }
+  
+  /*
+   * Does reuse an existing StringBuffer instead of allocating a new one
+   */
+  public void toString(StringBuffer sb) {
+    Iterator<Chain> it = reverse().iterator();
+    // sb.append(it.next().getValue());    
+    it.next(); sb.append("rootObject");
+    while (it.hasNext()) {
+      sb.append("->");
+      Chain current = it.next();
+      if (current.isThroughField()) {
+        sb.append(((FieldChain)current).getField().getName());
+      } else if (current.isThroughArrayIndex()) {
+        sb.append("[").append(((ArrayIndexChain)current).getArrayIndex()).append("]");
+      }
+    }
   }
 
   static class FieldChain extends Chain {

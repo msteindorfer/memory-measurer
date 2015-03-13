@@ -1,6 +1,8 @@
 package objectexplorer;
 
+import objectexplorer.Chain.FieldChain;
 import objectexplorer.ObjectVisitor.Traversal;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
@@ -19,6 +21,8 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 /**
  * A depth-first object graph explorer. The traversal starts at a root (an
@@ -158,6 +162,16 @@ public class ObjectExplorer {
           || chain.getValue() instanceof Class<?>);
     }
   };
+  
+  static final Predicate<Chain> skipTransientFields = new Predicate<Chain>(){
+	    public boolean apply(Chain chain) {
+			if (chain instanceof FieldChain && (((FieldChain) chain).getField().getModifiers() & Modifier.TRANSIENT) != 0) {
+				return false;
+			} else {
+				return true;
+			}
+	    }
+  };  
 
   static final Function<Chain, Object> chainToObject =
     new Function<Chain, Object>() {
