@@ -1,6 +1,90 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>memory-measurer</groupId>
-  <artifactId>memory-measurer</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.github.msteindorfer</groupId>
+	<artifactId>memory-measurer</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<scm>
+		<developerConnection>scm:git:https://github.com/msteindorfer/memory-measurer.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<!-- deployment configuration (usethesource) -->
+	<distributionManagement>
+		<repository>
+			<id>usethesource-releases</id>
+			<url>http://nexus.rascal-mpl.org/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>usethesource-snapshots</id>
+			<url>http://nexus.rascal-mpl.org/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<!-- dependency resolution configuration (usethesource) -->
+	<repositories>
+		<repository>
+			<id>usethesource</id>
+			<url>http://nexus.rascal-mpl.org/repository/maven-public/</url>
+		</repository>
+	</repositories>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Premain-Class>objectexplorer.InstrumentationGrabber</Premain-Class>
+						</manifestEntries>
+
+						<!-- 
+							NOTE: these two options should also work, but don't! 
+							Therefore I removed the MANIFEST.MF from the codebase. 
+							See original documentation at https://maven.apache.org/plugins/maven-jar-plugin/ 
+						-->
+						<!-- <manifestFile>
+							${basedir}/src/main/resources/META-INF/MANIFEST.MF
+						</manifestFile> -->
+						<!-- <manifestFile>
+							${project.build.outputDirectory}/META-INF/MANIFEST.MF
+						</manifestFile> -->
+					</archive>
+				</configuration>
+			</plugin>			
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>r09</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+		<!-- test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
 </project>
